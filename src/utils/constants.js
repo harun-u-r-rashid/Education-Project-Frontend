@@ -1,6 +1,7 @@
 import UserData from "../views/plugin/UserData";
-
-export const API_BASE_URL = `http://127.0.0.1:8000/api/`;
+// https://education-platfrom-u6f9.onrender.com/
+// http://127.0.0.1:8000/api/
+export const API_BASE_URL = `https://education-platfrom-u6f9.onrender.com/`;
 export const userId = UserData()?.user_id;
 export const PAYPAL_CLIENT_ID = "test";
 
