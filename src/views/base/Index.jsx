@@ -178,7 +178,7 @@ function Index() {
                 <div className="container-fluid p-0">
                     <div className="heroContainer">
                         <div className="heroItem position-relative">
-                            <img className="img-fluid" src="../../../public/images/hero.jpg" alt="" />
+                            <img className="img-fluid" src="../../assets/base/hero.jpg" alt="" />
                             <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style={{ background: "rgba(24, 29, 56, .5)" }}>
                                 <div className="container">
                                     <div className="row justify-content-start">
