@@ -18,7 +18,7 @@ import GetCurrentAddress from '../plugin/UserCountry';
 
 
 // ===Image import ====
-import imageOne from '../../assets/base/image1.png'
+import heroImage from '../../assets/base/hero.jpg'
 import reviewImage from '../../assets/base/reviewImage.jpeg'
 
 
@@ -174,31 +174,33 @@ function Index() {
 
 
 
-            <section className=''>
-                <div className="container-fluid p-0">
-                    <div className="heroContainer">
-                        <div className="heroItem position-relative">
-                            <img className="img-fluid" src="../../assets/base/hero.jpg" alt="" />
-                            <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style={{ background: "rgba(24, 29, 56, .5)" }}>
-                                <div className="container">
-                                    <div className="row justify-content-start">
-                                        <div className="col-sm-10 col-lg-8">
-                                            <h5 className="text-white text-uppercase mb-3 animated slideInDown">Welcome to academy</h5>
-                                            <h1 className="display-6 text-white animated slideInDown">The Best Online Learning Platform</h1>
-                                            <p className="fs-5 text-white mb-4 pb-2">Online learning is not the next big thing, it is the now big thing.</p>
-                                            <Link to="/about/">
-                                            <a href="#" className="btn btn-info py-md-3 px-md-5 me-3 animated slideInLeft">About Us <i class="fa-solid fa-address-card"></i></a>
-                                            </Link>
-                                            <a href="https://www.youtube.com/" target='blank' className="btn btn-light py-md-3 px-md-5 animated slideInRight">Watch Demo <i class="fa-solid fa-video"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <section className=''>
+  <div className="container-fluid p-0">
+    <div className="heroContainer">
+      <div className="heroItem position-relative">
+        <img className="img-fluid" src={heroImage} alt="" />
+        <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style={{ background: "rgba(24, 29, 56, .5)", zIndex: 2 }}>
+          <div className="container">
+            <div className="row justify-content-start">
+              <div className="col-sm-10 col-lg-8">
+                <h5 className="text-white text-uppercase mb-3 animated slideInDown">Welcome to academy</h5>
+                <h1 className="display-6 text-white animated slideInDown">The Best Online Learning Platform</h1>
+                <p className="fs-5 text-white mb-4 pb-2">Online learning is not the next big thing, it is the now big thing.</p>
+                <Link to="/about/" className="btn btn-info py-md-3 px-md-5 me-3 animated slideInLeft">
+                  About Us <i className="fa-solid fa-address-card"></i>
+                </Link>
+                <a href="https://www.youtube.com/" target='blank' className="btn btn-light py-md-3 px-md-5 animated slideInRight">
+                  Watch Demo <i className="fa-solid fa-video"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                    </div>
-                </div>
-            </section>
 
 
             <section className=''>
