@@ -12,10 +12,19 @@ import Cart from "./views/base/Cart";
 import Checkout from "./views/base/Checkout";
 import Success from "./views/base/Success";
 import Search from "./views/base/Search";
+import About from "./views/base/About";
 
 import { CartContext } from "./views/plugin/Context";
 
+
+// =====Internal css====
+
 import './App.css';
+import '../src/style/hero.css';
+import '../src/style/about.css';
+import '../src/style/footer.css';
+
+
 import CartId from "./views/plugin/CartId";
 
 
@@ -52,6 +61,11 @@ function App() {
             <Route
               path="/search/"
               element={<Search />}
+            />
+
+            <Route
+              path="/about/"
+              element={<About />}
             />
 
 

@@ -1,0 +1,32 @@
+#aboutImage{
+        min-height: 500px;
+     
+   
+}
+
+#aboutImage img{
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: 0.5s all ease-in-out;
+}
+
+
+
+
+#aboutImage img:hover{
+        overflow: hidden;
+        transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+        #aboutImage{
+                min-height: 300px;
+           
+        }
+
+}
+
+

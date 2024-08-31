@@ -58,7 +58,7 @@ function Checkout() {
 
 
         } catch (error) {
-            if (error.response.data.include("Coupon matching query doesn't exist")) {
+            if (error.response.data.includes("Coupon matching query does not exist")) {
                 Toast().fire({
                     icon: "error",
                     title: "Coupon Doesn't exist",
@@ -115,7 +115,7 @@ function Checkout() {
                     </div>
                 </div>
             </section>
-            <section className="pt-5">
+            <section className="lastSectio pt-5">
                 <div className="container">
                     <div className="row g-4 g-sm-5">
                         <div className="col-xl-8 mb-4 mb-sm-0">

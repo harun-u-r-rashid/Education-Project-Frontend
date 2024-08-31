@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import BaseHeader from '../partials/BaseHeader'
 import BaseFooter from '../partials/BaseFooter'
@@ -18,13 +18,14 @@ function CourseDetail() {
     const [isLoading, setIsLoading] = useState(true);
     const [addToCartBtn, setAddToCartBtn] = useState("Add To Cart");
     const [cartCount, setCartCount] = useContext(CartContext);
-
+    const isActive = UserData()?.is_active;
 
 
     const param = useParams();
+    const navigate = useNavigate();
 
     const country = GetCurrentAddress().country;
-    const userId = UserData().user_id;
+    const userId = UserData()?.user_id;
 
 
     // console.log(param.slug);
@@ -62,23 +63,34 @@ function CourseDetail() {
         fromdata.append("country", country);
         fromdata.append("cart_id", cartId);
 
-        try {
-            await useAxios().post(`course/create_cart/`, fromdata).then((res) => {
-                console.log(res.data);
-                setAddToCartBtn("Added To Cart");
-                Toast().fire({
-                    title: "Added to cart",
-                    icon: "success",
+        if(isActive){
+            try {
+                await useAxios().post(`course/create_cart/`, fromdata).then((res) => {
+                    console.log(res.data);
+                    setAddToCartBtn("Added To Cart");
+                    Toast().fire({
+                        title: "Added to cart",
+                        icon: "success",
+                    });
+    
+                    apiInstance.get(`course/cart/${CartId()}/`).then((res) => {
+                        setCartCount(res.data?.length);
+                    });
                 });
+    
+            } catch (error) {
+                console.log(error);
+                setAddToCartBtn("Add To Cart");
+    
+            }
+        } else{
+            console.log("Login first");
+            Toast().fire({
+                title:"You have to login first!",
+                icon:"error",
 
-                apiInstance.get(`course/cart/${CartId()}/`).then((res) => {
-                    setCartCount(res.data?.length);
-                });
             });
-
-        } catch (error) {
-            console.log(error);
-            setAddToCartBtn("Add To Cart");
+            navigate(`/login/`);
 
         }
 
@@ -101,11 +113,11 @@ function CourseDetail() {
                             <div className="container">
                                 <div className="row py-5">
                                     <div className="col-lg-8">
-                                        {/* Badge */}
+                                  
                                         <h6 className="mb-3 font-base bg-primary text-white py-2 px-4 rounded-2 d-inline-block">
                                             {courses?.category?.title || null}
                                         </h6>
-                                        {/* Title */}
+                                     
                                         <h1 className='mb-3'>{courses?.title}</h1>
                                         <p
                                             className="mb-3"
@@ -113,7 +125,7 @@ function CourseDetail() {
                                                 __html: `${courses?.description?.slice(0, 200)}`,
                                             }}
                                         ></p>
-                                        {/* Content */}
+                                   
                                         <ul className="list-inline mb-0">
                                             <li className="list-inline-item h6 me-3 mb-1 mb-sm-0">
                                                 <i className="fas fa-star text-warning me-2" />
@@ -140,44 +152,44 @@ function CourseDetail() {
                                 </div>
                             </div>
                         </section>
-                        <section className="pb-0 py-lg-5">
+                        <section className="lastSection pb-0 py-lg-5 mb-5">
                             <div className="container">
                                 <div className="row">
-                                    {/* Main content START */}
+                            
                                     <div className="col-lg-8">
                                         <div className="card shadow rounded-2 p-0">
-                                            {/* Tabs START */}
+                                     
                                             <div className="card-header border-bottom px-4 py-3">
                                                 <ul
                                                     className="nav nav-pills nav-tabs-line py-0"
                                                     id="course-pills-tab"
                                                     role="tablist"
                                                 >
-                                                    {/* Tab item */}
+                                              
                                                     <li className="nav-item me-2 me-sm-4" role="presentation">
                                                         <button className="nav-link mb-2 mb-md-0 active" id="course-pills-tab-1" data-bs-toggle="pill" data-bs-target="#course-pills-1" type="button" role="tab" aria-controls="course-pills-1" aria-selected="true">
                                                             Overview
                                                         </button>
                                                     </li>
-                                                    {/* Tab item */}
+                                              
                                                     <li className="nav-item me-2 me-sm-4" role="presentation">
                                                         <button className="nav-link mb-2 mb-md-0" id="course-pills-tab-2" data-bs-toggle="pill" data-bs-target="#course-pills-2" type="button" role="tab" aria-controls="course-pills-2" aria-selected="false">
                                                             Curriculum
                                                         </button>
                                                     </li>
-                                                    {/* Tab item */}
+                                         
                                                     <li className="nav-item me-2 me-sm-4" role="presentation">
                                                         <button className="nav-link mb-2 mb-md-0" id="course-pills-tab-3" data-bs-toggle="pill" data-bs-target="#course-pills-3" type="button" role="tab" aria-controls="course-pills-3" aria-selected="false">
                                                             Instructor
                                                         </button>
                                                     </li>
-                                                    {/* Tab item */}
+                                            
                                                     <li className="nav-item me-2 me-sm-4" role="presentation">
                                                         <button className="nav-link mb-2 mb-md-0" id="course-pills-tab-4" data-bs-toggle="pill" data-bs-target="#course-pills-4" type="button" role="tab" aria-controls="course-pills-4" aria-selected="false">
                                                             Reviews
                                                         </button>
                                                     </li>
-                                                    {/* Tab item */}
+                                              
                                                     <li className="nav-item me-2 me-sm-4 d-none" role="presentation">
                                                         <button className="nav-link mb-2 mb-md-0" id="course-pills-tab-5" data-bs-toggle="pill" data-bs-target="#course-pills-5" type="button" role="tab" aria-controls="course-pills-5" aria-selected="false">
                                                             FAQs
@@ -191,11 +203,10 @@ function CourseDetail() {
                                                     </li>
                                                 </ul>
                                             </div>
-                                            {/* Tabs END */}
-                                            {/* Tab contents START */}
+                                       
                                             <div className="card-body p-4">
                                                 <div className="tab-content pt-2" id="course-pills-tabContent">
-                                                    {/* Content START */}
+                                        
                                                     <div className="tab-pane fade show active" id="course-pills-1" role="tabpanel" aria-labelledby="course-pills-tab-1" >
                                                         <h5 className="mb-3">Course Description</h5>
                                                         <p className="mb-3">
@@ -308,7 +319,7 @@ function CourseDetail() {
                                                                         data-bs-parent="#accordionExample2"
                                                                     >
                                                                         <div className="accordion-body mt-3">
-                                                                            {/* Course lecture */}
+                                                                
                                                                             {course.variant_id?.map((lecture, index) => (
                                                                                 <div className="d-flex justify-content-between align-items-center">
                                                                                     <div className="position-relative d-flex align-items-center">
@@ -333,8 +344,8 @@ function CourseDetail() {
 
                                                                             ))}
 
-                                                                            <hr /> {/* Divider */}
-                                                                            {/* Course lecture */}
+                                                                            <hr />
+                                                                 
                                                                             <div className="d-flex justify-content-between align-items-center">
                                                                                 <div className="position-relative d-flex align-items-center">
                                                                                     <a
@@ -374,21 +385,20 @@ function CourseDetail() {
 
 
                                                         </div>
-                                                        {/* Course accordion END */}
+                                                  
                                                     </div>
-                                                    {/* Content END */}
-                                                    {/* Content START */}
+                                            
                                                     <div
                                                         className="tab-pane fade"
                                                         id="course-pills-3"
                                                         role="tabpanel"
                                                         aria-labelledby="course-pills-tab-3"
                                                     >
-                                                        {/* Card START */}
+                                                  
                                                         <div className="card mb-0 mb-md-4">
                                                             <div className="row g-0 align-items-center">
                                                                 <div className="col-md-5">
-                                                                    {/* Image */}
+                                                          
                                                                     <img
                                                                         src={courses?.teacher?.image}
                                                                         className="img-fluid rounded-3"
@@ -396,12 +406,12 @@ function CourseDetail() {
                                                                     />
                                                                 </div>
                                                                 <div className="col-md-7">
-                                                                    {/* Card body */}
+                                                    
                                                                     <div className="card-body">
-                                                                        {/* Title */}
+                                                                   
                                                                         <h3 className="card-title mb-0">{courses?.teacher?.full_name}</h3>
                                                                         <p className="mb-2">{courses?.teacher?.bio}</p>
-                                                                        {/* Social button */}
+                                                             
                                                                         <ul className="list-inline mb-3">
                                                                             <li className="list-inline-item me-3">
                                                                                 <a href={courses?.teacher?.twitter} className="fs-5 text-twitter">
@@ -424,8 +434,8 @@ function CourseDetail() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        {/* Card END */}
-                                                        {/* Instructor info */}
+                                            
+                                             
                                                         <h5 className="mb-3">About Instructor</h5>
                                                         <p className="mb-3">
                                                             {courses?.teacher?.about}
@@ -438,8 +448,8 @@ function CourseDetail() {
                                                         role="tabpanel"
                                                         aria-labelledby="course-pills-tab-4"
                                                     >
-                                                        {/* Review START */}
-                                                        <div className="row mb-1">
+                                             
+                                                        {/* <div className="row mb-1">
                                                             <h5 className="mb-4">Our Student Reviews</h5>
                                                         </div>
 
@@ -454,11 +464,11 @@ function CourseDetail() {
                                                                         alt="avatar"
                                                                     />
                                                                 </div>
-                                                                {/* Text */}
+                                                       
                                                                 <div>
                                                                     <div className="d-sm-flex mt-1 mt-md-0 align-items-center">
                                                                         <h5 className="me-3 mb-0">Sam Jay</h5>
-                                                                        {/* Review star */}
+                                                                  
                                                                         <ul className="list-inline mb-0">
                                                                             <i className="fas fa-star text-warning" />
                                                                             <i className="fas fa-star text-warning" />
@@ -467,7 +477,7 @@ function CourseDetail() {
                                                                             <i className="far fa-star text-warning" />
                                                                         </ul>
                                                                     </div>
-                                                                    {/* Info */}
+                                                              
                                                                     <p className="small mb-2">5 days ago</p>
                                                                     <p className="mb-2">
                                                                         Perceived end knowledge certainly day sweetness why
@@ -477,15 +487,14 @@ function CourseDetail() {
                                                                         visitors we private removed. Moderate do subjects to
                                                                         distance.
                                                                     </p>
-                                                                    {/* Like and dislike button */}
+                                                                  
                                                                 </div>
                                                             </div>
-                                                            {/* Comment children level 1 */}
+                                                        
                                                             <hr />
-                                                            {/* Review item END */}
-                                                            {/* Review item START */}
+                                                      
                                                             <div className="d-md-flex my-4">
-                                                                {/* Avatar */}
+                                                             
                                                                 <div className="avatar avatar-xl me-4 flex-shrink-0">
                                                                     <img
                                                                         className="avatar-img rounded-circle"
@@ -494,11 +503,11 @@ function CourseDetail() {
                                                                         alt="avatar"
                                                                     />
                                                                 </div>
-                                                                {/* Text */}
+                                                      
                                                                 <div>
                                                                     <div className="d-sm-flex mt-1 mt-md-0 align-items-center">
                                                                         <h5 className="me-3 mb-0">Benny Doggo</h5>
-                                                                        {/* Review star */}
+                                                                  
                                                                         <ul className="list-inline mb-0">
                                                                             <li className="list-inline-item me-0">
                                                                                 <i className="fas fa-star text-warning" />
@@ -517,7 +526,7 @@ function CourseDetail() {
                                                                             </li>
                                                                         </ul>
                                                                     </div>
-                                                                    {/* Info */}
+                                                     
                                                                     <p className="small mb-2">2 days ago</p>
                                                                     <p className="mb-2">
                                                                         Handsome met debating sir dwelling age material. As
@@ -527,17 +536,16 @@ function CourseDetail() {
                                                                     </p>
                                                                 </div>
                                                             </div>
-                                                            {/* Review item END */}
-                                                            {/* Divider */}
+                                                
+                                                      
                                                             <hr />
-                                                        </div>
-                                                        {/* Student review END */}
-                                                        {/* Leave Review START */}
-                                                        <div className="mt-2">
+                                                        </div> */}
+                                     
+                                                        {/* <div className="mt-2">
                                                             <h5 className="mb-4">Leave a Review</h5>
                                                             <form className="row g-3">
 
-                                                                {/* Rating */}
+                                                      
                                                                 <div className="col-12 bg-light-input">
                                                                     <select
                                                                         id="inputState2"
@@ -550,7 +558,7 @@ function CourseDetail() {
                                                                         <option>★☆☆☆☆ (1/5)</option>
                                                                     </select>
                                                                 </div>
-                                                                {/* Message */}
+                                                      
                                                                 <div className="col-12 bg-light-input">
                                                                     <textarea
                                                                         className="form-control"
@@ -560,32 +568,31 @@ function CourseDetail() {
                                                                         defaultValue={""}
                                                                     />
                                                                 </div>
-                                                                {/* Button */}
+                                                        
                                                                 <div className="col-12">
                                                                     <button type="submit" className="btn btn-primary mb-0">
                                                                         Post Review
                                                                     </button>
                                                                 </div>
                                                             </form>
-                                                        </div>
-                                                        {/* Leave Review END */}
+                                                        </div> */}
+                                            
                                                     </div>
-                                                    {/* Content END */}
-                                                    {/* Content START */}
+                                          
                                                     <div
                                                         className="tab-pane fade"
                                                         id="course-pills-5"
                                                         role="tabpanel"
                                                         aria-labelledby="course-pills-tab-5"
                                                     >
-                                                        {/* Title */}
+                                              
                                                         <h5 className="mb-3">Frequently Asked Questions</h5>
-                                                        {/* Accordion START */}
+                                               
                                                         <div
                                                             className="accordion accordion-flush"
                                                             id="accordionExample"
                                                         >
-                                                            {/* Item */}
+                                                     
                                                             <div className="accordion-item">
                                                                 <h2 className="accordion-header" id="headingOne">
                                                                     <button
@@ -622,7 +629,7 @@ function CourseDetail() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            {/* Item */}
+                                                  
                                                             <div className="accordion-item">
                                                                 <h2 className="accordion-header" id="headingTwo">
                                                                     <button
@@ -680,7 +687,7 @@ function CourseDetail() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            {/* Item */}
+                                                      
                                                             <div className="accordion-item">
                                                                 <h2 className="accordion-header" id="headingThree">
                                                                     <button
@@ -723,7 +730,7 @@ function CourseDetail() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            {/* Item */}
+                                                      
                                                             <div className="accordion-item">
                                                                 <h2 className="accordion-header" id="headingFour">
                                                                     <button
@@ -770,7 +777,7 @@ function CourseDetail() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            {/* Item */}
+                                                    
                                                             <div className="accordion-item">
                                                                 <h2 className="accordion-header" id="headingFive">
                                                                     <button
@@ -810,28 +817,28 @@ function CourseDetail() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        {/* Accordion END */}
+                                                   
                                                     </div>
-                                                    {/* Content END */}
-                                                    {/* Content START */}
-                                                    <div
+                                              
+                                               
+                                                    {/* <div
                                                         className="tab-pane fade"
                                                         id="course-pills-6"
                                                         role="tabpanel"
                                                         aria-labelledby="course-pills-tab-6"
                                                     >
-                                                        {/* Review START */}
+                                                      
                                                         <div className="row">
                                                             <div className="col-12">
                                                                 <h5 className="mb-4">Group Chat & Q/A Forum</h5>
 
-                                                                {/* Comment item START */}
+                                                         
                                                                 <div className="border p-2 p-sm-4 rounded-3 mb-4">
                                                                     <ul className="list-unstyled mb-0">
                                                                         <li className="comment-item">
                                                                             <div className="d-flex mb-3">
                                                                                 <div className="ms-2">
-                                                                                    {/* Comment by */}
+                                                                                 
                                                                                     <div className="bg-light p-3 rounded">
                                                                                         <div className="d-flex justify-content-center">
                                                                                             <div className="me-2">
@@ -847,7 +854,7 @@ function CourseDetail() {
                                                                                             <small>5hr</small>
                                                                                         </div>
                                                                                     </div>
-                                                                                    {/* Comment react */}
+                                                                             
                                                                                     <ul className="nav nav-divider py-2 small">
                                                                                         <li className="nav-item">
                                                                                             <a className="btn btn-primary btn-sm" href="#">
@@ -862,7 +869,7 @@ function CourseDetail() {
                                                                         <li className="comment-item">
                                                                             <div className="d-flex mb-3">
                                                                                 <div className="ms-2">
-                                                                                    {/* Comment by */}
+                                                                             
                                                                                     <div className="bg-light p-3 rounded">
                                                                                         <div className="d-flex justify-content-center">
                                                                                             <div className="me-2">
@@ -878,7 +885,7 @@ function CourseDetail() {
                                                                                             <small>5hr</small>
                                                                                         </div>
                                                                                     </div>
-                                                                                    {/* Comment react */}
+                                                                           
                                                                                     <ul className="nav nav-divider py-2 small">
                                                                                         <li className="nav-item">
                                                                                             <a className="btn btn-primary btn-sm" href="#">
@@ -891,7 +898,7 @@ function CourseDetail() {
                                                                         </li>
                                                                     </ul>
                                                                 </div>
-                                                                {/* Chat Detail Page */}
+                                                         
                                                                 <div className="border p-2 p-sm-4 rounded-3">
                                                                     <ul className="list-unstyled mb-0" style={{ overflowY: "scroll", height: "500px" }}>
                                                                         <li className="comment-item mb-3">
@@ -902,7 +909,7 @@ function CourseDetail() {
                                                                                     </a>
                                                                                 </div>
                                                                                 <div className="ms-2">
-                                                                                    {/* Comment by */}
+                                                                             
                                                                                     <div className="bg-light p-3 rounded w-100">
                                                                                         <div className="d-flex w-100 justify-content-center">
                                                                                             <div className="me-2 ">
@@ -928,7 +935,7 @@ function CourseDetail() {
                                                                                     </a>
                                                                                 </div>
                                                                                 <div className="ms-2">
-                                                                                    {/* Comment by */}
+                                                                                
                                                                                     <div className="bg-light p-3 rounded w-100">
                                                                                         <div className="d-flex w-100 justify-content-center">
                                                                                             <div className="me-2 ">
@@ -954,7 +961,7 @@ function CourseDetail() {
                                                                                     </a>
                                                                                 </div>
                                                                                 <div className="ms-2">
-                                                                                    {/* Comment by */}
+                                                                       
                                                                                     <div className="bg-light p-3 rounded w-100">
                                                                                         <div className="d-flex w-100 justify-content-center">
                                                                                             <div className="me-2 ">
@@ -980,7 +987,7 @@ function CourseDetail() {
                                                                                     </a>
                                                                                 </div>
                                                                                 <div className="ms-2">
-                                                                                    {/* Comment by */}
+                                                                       
                                                                                     <div className="bg-light p-3 rounded w-100">
                                                                                         <div className="d-flex w-100 justify-content-center">
                                                                                             <div className="me-2 ">
@@ -1006,20 +1013,19 @@ function CourseDetail() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    {/* Main content END */}
-                                    {/* Right sidebar START */}
+                          
                                     <div className="col-lg-4 pt-5 pt-lg-0">
                                         <div className="row mb-5 mb-lg-0">
                                             <div className="col-md-6 col-lg-12">
                                               
                                                 <div className="card shadow p-2 mb-4 z-index-9">
                                                     <div className="overflow-hidden rounded-3">
-                                                        <img src="https://geeksui.codescandy.com/geeks/assets/images/course/course-angular.jpg" className="card-img" alt="course image" />
+                                                        <img src={courses?.image} className="card-img" alt="course image" />
                                                         <div className="m-auto rounded-2 mt-2 d-flex justify-content-center align-items-center" style={{ backgroundColor: "#ededed" }}>
                                                             <a data-bs-toggle="modal" data-bs-target="#exampleModal" href="https://www.youtube.com/embed/tXHviS-4ygo" className="btn btn-lg text-danger btn-round btn-white-shadow mb-0" data-glightbox="" data-gallery="course-video">
                                                                 <i className="fas fa-play" />
@@ -1115,7 +1121,7 @@ function CourseDetail() {
                                                             {addToCartBtn === "Add To Cart" && (
                                                                 <button
                                                                     type='button'
-                                                                    className="btn btn-primary mb-0 w-100 me-2"
+                                                                    className="btn btn-success mb-0 w-100 me-2"
                                                                     onClick={() =>
                                                                         addToCart(
                                                                             courses?.id,
@@ -1133,7 +1139,7 @@ function CourseDetail() {
                                                             {addToCartBtn === "Added To Cart" && (
                                                                 <button
                                                                     type='button'
-                                                                    className="btn btn-primary mb-0 w-100 me-2"
+                                                                    className="btn btn-success mb-0 w-100 me-2"
                                                                     onClick={() =>
                                                                         addToCart(
                                                                             courses?.id,
@@ -1151,7 +1157,7 @@ function CourseDetail() {
                                                             {addToCartBtn === "Adding To Cart" && (
                                                                 <button
                                                                     type='button'
-                                                                    className="btn btn-primary mb-0 w-100 me-2"
+                                                                    className="btn btn-success mb-0 w-100 me-2"
                                                                     onClick={() =>
                                                                         addToCart(
                                                                             courses?.id,
@@ -1168,10 +1174,10 @@ function CourseDetail() {
 
 
 
-                                                            <Link to="/cart/" className="btn btn-success mb-0 w-100">
+                                                            {/* <Link to="/cart/" className="btn btn-success mb-0 w-100">
                                                                 Enroll Now {" "}
                                                                 <i className='fas fa-arrow-right'></i>
-                                                            </Link>
+                                                            </Link> */}
                                                         </div>
                                                     </div>
                                                 </div>

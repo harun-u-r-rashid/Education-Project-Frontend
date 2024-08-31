@@ -8,6 +8,7 @@ import Toast from '../plugin/Toast'
 import apiInstance from '../../utils/axios'
 import { CartContext } from '../plugin/Context'
 import { userId } from '../../utils/constants';
+import UserData from '../plugin/UserData'
 
 
 // import {userId} from '../../utils/constants';
@@ -17,6 +18,9 @@ function Cart() {
     const [carts, setCarts] = useState([]);
     const [cartStats, setCartStats] = useState([]);
     const [cartCount, setCartCount] = useContext(CartContext);
+    const isActive = UserData()?.is_active;
+
+    console.log(isActive);
 
 
 
@@ -86,45 +90,33 @@ function Cart() {
         formdata.append("country", bioData.country);
         formdata.append("cart_id", CartId());
         formdata.append("user_id", userId);
+     
 
-        try {
-            await apiInstance.post(`course/order/create_order/`, formdata).then((res) => {
-                // console.log(res.data);
-                // console.log("order_id",res.data.order_id);
-                Toast().fire({
-                    title: "Order created successfully",
-                    icon: "success"
-                })
-                navigate(`/checkout/${res.data.order_id}/`);
+        if(isActive){
+            try {
+                await apiInstance.post(`course/order/create_order/`, formdata).then((res) => {
+                    console.log(res.data);
+                    console.log("order_id",res.data.order_id);
+                    Toast().fire({
+                        title: "Order created successfully",
+                        icon: "success"
+                    })
+                    navigate(`/checkout/${res.data.order_id}/`);
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        } else{
+            console.log("Login first");
+            Toast().fire({
+                title:"You have to login first!",
+                icon:"error",
+
             });
-        } catch (error) {
-            console.log(error);
+            navigate(`/login/`);
+
         }
     };
-    // const createOrder = async (e) => {
-    //     e.preventDefault()
-
-    //     const formdata = new FormData()
-    //     formdata.append("full_name", bioData.full_name);
-    //     formdata.append("email", bioData.email);
-    //     formdata.append("country", bioData.country);
-    //     formdata.append("cart_id", CartId());
-    //     formdata.append("user_id", userId);
-
-    //     try {
-
-    //         await apiInstance.post(`course/order/create_order/`, formdata).then((res) => {
-    //             console.log(res.data);
-    //             console.log(res.data.order_id);
-    //             navigate(`/checkout/${res.data.order_id}/`);
-    //         });
-
-    //     } catch (error) {
-    //         console.log(error);
-
-    //     }
-    // };
-
 
     return (
         <>
@@ -136,16 +128,17 @@ function Cart() {
                         <div className="col-12">
                             <div className="bg-light p-4 text-center rounded-3">
                                 <h1 className="m-0">My cart</h1>
-                                {/* Breadcrumb */}
+                       
                                 <div className="d-flex justify-content-center">
                                     <nav aria-label="breadcrumb">
                                         <ol className="breadcrumb breadcrumb-dots mb-0">
                                             <li className="breadcrumb-item">
-                                                <a href="#" className='text-decoration-none text-dark'>Home</a>
+                                                <Link to="/">
+                                                <a href="#" className='text-dark'>Home</a>
+                                                </Link>
+                                                
                                             </li>
-                                            <li className="breadcrumb-item">
-                                                <a href="#" className='text-decoration-none text-dark'>Courses</a>
-                                            </li>
+                                          
                                             <li className="breadcrumb-item active" aria-current="page">
                                                 Cart
                                             </li>
@@ -158,7 +151,7 @@ function Cart() {
                 </div>
             </section>
 
-            <section className="pt-5">
+            <section className="lastSection pt-5">
                 <div className="container">
                     <form onSubmit={createOrder}  >
                         <div className="row g-4 g-sm-5">

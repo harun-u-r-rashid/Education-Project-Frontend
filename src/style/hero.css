@@ -1,0 +1,52 @@
+@media (max-width: 768px) {
+  .heroContainer .heroItem {
+    position: relative;
+    min-height: 350px;
+  }
+
+  .heroContainer .heroItem img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.slideInDown {
+  animation-duration: 3s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    translate: 150vw 0;
+    scale: 200% 1;
+  }
+
+  to {
+    translate: 0 0;
+    scale: 100% 1;
+  }
+}
+
+
+
+.service-item {
+  background: var(--card-color);
+  transition: 0.5s;
+}
+
+.service-item:hover {
+  margin-top: -10px;
+  background: var(--primary-color);
+  color: white;
+}
+
+
+.service-item * {
+  transition: 0.5s;
+}
+
+.service-item:hover * {
+  color: var(--light-color) !important;
+}

@@ -3,13 +3,10 @@ import React, { useEffect, useState, useContext } from 'react'
 import moment from 'moment'
 import Rater from "react-rater";
 import "react-rater/lib/react-rater.css"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import useAxios from '../../utils/useAxios'
 import apiInstance from '../../utils/axios';
 
-// ===Image import ====
-import imageOne from '../../assets/base/image1.png'
-import reviewImage from '../../assets/base/reviewImage.jpeg'
 
 import BaseHeader from '../partials/BaseHeader'
 import BaseFooter from '../partials/BaseFooter'
@@ -18,6 +15,12 @@ import Toast from '../plugin/Toast';
 import UserData from '../plugin/UserData';
 import CartId from '../plugin/CartId';
 import GetCurrentAddress from '../plugin/UserCountry';
+
+
+// ===Image import ====
+import imageOne from '../../assets/base/image1.png'
+import reviewImage from '../../assets/base/reviewImage.jpeg'
+
 
 function Index() {
 
@@ -28,21 +31,41 @@ function Index() {
 
     const country = GetCurrentAddress().country;
     const userId = UserData()?.user_id;
+    const isActive = UserData()?.is_active;
+    const navigate = useNavigate();
+
+    const userdetails = UserData();
+
+
     const cartId = CartId();
 
-    // Fetching Course
+
+    // // Random console
+
+    // if (userdetails) {
+    //     console.log(isActive);
+    // } else {
+    //     console.log("No user details available");
+    // }
+
+
     const fetchCourse = async () => {
         setIsLoading(true);
-        try {
-            await useAxios()
-                .get(`course/course_list/`)
-                .then((res) => {
-                    setCourses(res.data);
-                    setIsLoading(false);
-                });
-        } catch (error) {
-            console.log(error);
+        if (isActive || !isActive) {
+            try {
+                await useAxios()
+                    .get(`course/course_list/`)
+                    .then((res) => {
+                        setCourses(res.data);
+                        console.log(res.data);
+                        setIsLoading(false);
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+
         }
+
     };
 
     // console.log(courses);
@@ -50,16 +73,21 @@ function Index() {
     // Review fetching
     const fetchReview = async () => {
         setIsLoading(true);
-        try {
-            await useAxios()
-                .get(`course/review/`)
-                .then((res) => {
-                    setReviews(res.data);
-                    setIsLoading(false);
-                });
-        } catch (error) {
-            console.log(error);
+
+        if (isActive || !isActive) {
+            try {
+                await useAxios()
+                    .get(`course/review/`)
+                    .then((res) => {
+                        setReviews(res.data);
+                        setIsLoading(false);
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+
         }
+
     };
     console.log(reviews);
 
@@ -81,24 +109,36 @@ function Index() {
         formdata.append("country", country);
         formdata.append("cart_id", cartId);
 
-        try {
-            await useAxios()
-                .post(`course/create_cart/`, formdata)
-                .then((res) => {
-                    console.log(res.data);
-                    Toast().fire({
-                        title: "Added to cart",
-                        icon: "success",
-                    });
+        if (isActive) {
+            try {
+                await useAxios()
+                    .post(`course/create_cart/`, formdata)
+                    .then((res) => {
+                        console.log(res.data);
+                        Toast().fire({
+                            title: "Added to cart",
+                            icon: "success",
+                        });
 
-                    apiInstance.get(`course/cart/${CartId()}/`).then((res) => {
-                        setCartCount(res.data?.length);
-                    });
-                })
-        } catch (error) {
-            console.log(error);
+                        apiInstance.get(`course/cart/${CartId()}/`).then((res) => {
+                            setCartCount(res.data?.length);
+                        });
+                    })
+            } catch (error) {
+                console.log(error);
 
+
+            }
+        } else {
+            console.log("Login first");
+            Toast().fire({
+                title: "You have to login first!",
+                icon: "error",
+
+            });
+            navigate(`/login/`);
         }
+
     };
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -131,102 +171,74 @@ function Index() {
         <>
             <BaseHeader />
 
-            <section className="py-lg-8 py-5">
-                {/* container */}
-                <div className="container my-lg-8">
-                    {/* row */}
-                    <div className="row align-items-center">
-                        {/* col */}
-                        <div className="col-lg-6 mb-6 mb-lg-0">
-                            <div>
 
-                                <h1 className="display-5 fw-bold mb-3">
-                                    Increase your skills and grow you knowledge.
-                                </h1>
-                                {/* para */}
-                                <p className="pe-lg-10 mb-5">
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Exercitationem incidunt illo, possimus molestias ex facere reiciendis ipsam commodi dolore quaerat!
-                                </p>
-                                {/* btn */}
-                                {/* <a href="#" className="btn btn-primary fs-4 text-light ms-3">
-                                    Join Free <i className='fas fa-plus'></i>
-                                </a> */}
-                                <a target='blank'
-                                    href="https://www.youtube.com/"
-                                    className="btn btn-outline-success fs-5 d-block mx-auto"
-                                >
 
-                                    Watch Demo <i className='fas fa-video'></i>
-                                </a>
+
+            <section className=''>
+                <div className="container-fluid p-0">
+                    <div className="heroContainer">
+                        <div className="heroItem position-relative">
+                            <img className="img-fluid" src="../../../public/images/hero.jpg" alt="" />
+                            <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style={{ background: "rgba(24, 29, 56, .5)" }}>
+                                <div className="container">
+                                    <div className="row justify-content-start">
+                                        <div className="col-sm-10 col-lg-8">
+                                            <h5 className="text-white text-uppercase mb-3 animated slideInDown">Welcome to academy</h5>
+                                            <h1 className="display-6 text-white animated slideInDown">The Best Online Learning Platform</h1>
+                                            <p className="fs-5 text-white mb-4 pb-2">Online learning is not the next big thing, it is the now big thing.</p>
+                                            <Link to="/about/">
+                                            <a href="#" className="btn btn-info py-md-3 px-md-5 me-3 animated slideInLeft">About Us <i class="fa-solid fa-address-card"></i></a>
+                                            </Link>
+                                            <a href="https://www.youtube.com/" target='blank' className="btn btn-light py-md-3 px-md-5 animated slideInRight">Watch Demo <i class="fa-solid fa-video"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        {/* col */}
-                        <div className="col-lg-6 d-flex justify-content-center">
-                            {/* images */}
-                            <div className="position-relative imgContainer">
-                                <img
-                                    src={imageOne}
 
-                                    className="end-0 bottom-0"
-                                />
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
 
-            <section className="pb-8">
-                <div className="container mb-lg-8">
-                    {/* row */}
-                    <div className="row mb-5">
-                        <div className="col-md-6 col-lg-3 border-top-md border-top pb-4  border-end-md">
-                            {/* text */}
-                            <div className="py-7 text-center">
-                                <div className="mb-3">
-                                    <i className="fe fe-award fs-2 text-info" />
-                                </div>
-                                <div className="lh-1">
-                                    <h2 className="mb-1">10+</h2>
-                                    <span>Qualified Instructor</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6 col-lg-3 border-top-md border-top border-end-lg">
-                            {/* icon */}
-                            <div className="py-7 text-center">
-                                <div className="mb-3">
-                                    <i className="fe fe-users fs-2 text-warning" />
-                                </div>
-                                {/* text */}
-                                <div className="lh-1">
-                                    <h2 className="mb-1">1k+</h2>
-                                    <span>Course enrolments</span>
+
+            <section className=''>
+                <div class="container-xxl py-1">
+                    <div class="container">
+                        <div class="row g-4">
+                            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="service-item text-center pt-2">
+                                    <div class="p-4">
+                                        <i class="fa fa-3x fa-graduation-cap mb-4"></i>
+                                        <h5 class="mb-3">Skilled Instructors</h5>
+                                        <p>Diam elitr kasd sed at elitr sed ipsum justo dolor sed clita amet diam</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-md-6 col-lg-3 border-top-lg border-top border-end-md">
-                            {/* icon */}
-                            <div className="py-7 text-center">
-                                <div className="mb-3">
-                                    <i className="fe fe-tv fs-2 text-primary" />
-                                </div>
-                                {/* text */}
-                                <div className="lh-1">
-                                    <h2 className="mb-1">100+</h2>
-                                    <span>Courses in 5 languages</span>
+                            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                                <div class="service-item text-center pt-2">
+                                    <div class="p-4">
+                                        <i class="fa fa-3x fa-globe  mb-4"></i>
+                                        <h5 class="mb-3">Online Classes</h5>
+                                        <p>Diam elitr kasd sed at elitr sed ipsum justo dolor sed clita amet diam</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-md-6 col-lg-3 border-top-lg border-top">
-                            {/* icon */}
-                            <div className="py-7 text-center">
-                                <div className="mb-3">
-                                    <i className="fe fe-film fs-2 text-success" />
+                            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+                                <div class="service-item text-center pt-2">
+                                    <div class="p-4">
+                                        <i class="fa fa-3x fa-home  mb-4"></i>
+                                        <h5 class="mb-3">Home Projects</h5>
+                                        <p>Diam elitr kasd sed at elitr sed ipsum justo dolor sed clita amet diam</p>
+                                    </div>
                                 </div>
-                                {/* text */}
-                                <div className="lh-1">
-                                    <h2 className="mb-1">500+</h2>
-                                    <span>Online Videos</span>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                                <div class="service-item text-center pt-2">
+                                    <div class="p-4">
+                                        <i class="fa fa-3x fa-book-open  mb-4"></i>
+                                        <h5 class="mb-3">Book Library</h5>
+                                        <p>Diam elitr kasd sed at elitr sed ipsum justo dolor sed clita amet diam</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -234,12 +246,13 @@ function Index() {
                 </div>
             </section>
 
-            <section className='mb-5'>
-                <div className="container mb-lg-8 ">
-                    <div className="row mb-2 mt-3">
-                        {/* col */}
+
+            <section className=''>
+                <div className="container">
+                    <div className="row">
+                  
                         <div className="col-12">
-                            <div className="mb-6">
+                            <div className="">
                                 <h2 className="mb-1 h1">👩🏻‍💻Popular Courses</h2>
                                 <p>
 
@@ -248,7 +261,7 @@ function Index() {
                         </div>
                     </div>
 
-                    <div className="searchBox row mb-5 mt-1 justify-content-center text-center">
+                    <div className="searchBox row mb-4 justify-content-center text-center">
                         {/* col */}
                         <div className="col-12">
                             <div className="mb-1">
@@ -402,15 +415,15 @@ function Index() {
                 </div>
             </section>
 
-            <section className="my-8 py-lg-8">
-                {/* container */}
+            {/* <section className="my-8 py-lg-8">
+        
                 <div className="container">
-                    {/* row */}
+         
                     <div className="row align-items-center bg-primary gx-0 rounded-3 mt-5">
-                        {/* col */}
+           
                         <div className="col-lg-6 col-12 d-none d-lg-block">
                             <div className="d-flex justify-content-center pt-4">
-                                {/* img */}
+                      
                                 <div className="position-relative">
                                     <img
                                         src="https://geeksui.codescandy.com/geeks/assets/images/png/cta-instructor-1.png"
@@ -420,36 +433,36 @@ function Index() {
                                     <div className="ms-n8 position-absolute bottom-0 start-0 mb-6">
                                         <img src="https://geeksui.codescandy.com/geeks/assets/images/svg/dollor.svg" alt="dollor" />
                                     </div>
-                                    {/* img */}
+                              
                                     <div className="me-n4 position-absolute top-0 end-0">
                                         <img src="https://geeksui.codescandy.com/geeks/assets/images/svg/graph.svg" alt="graph" />
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-5 col-12">
+                       <div className="col-lg-5 col-12">
                             <div className="text-white p-5 p-lg-0">
-                                {/* text */}
+                           
                                 <h2 className="h1 text-white">Become an instructor today</h2>
                                 <p className="mb-0">
                                     Instructors from around the world, teach millions of students on
                                     Geeks. We provide the tools and skills to teach what you love.
                                 </p>
-                                {/* <a href="#" className="btn bg-white text-dark fw-bold mt-4">
+                              <a href="#" className="btn bg-white text-dark fw-bold mt-4">
                                     Start Teaching Today <i className='fas fa-arrow-right'></i>
-                                </a> */}
+                                </a> 
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
-            </section>
+            </section> */}
 
-            <section className="bg-gray-200 pt-8 pb-8 mt-5">
+            <section className="lastSection bg-gray-200">
                 {reviews.length > 0 && (
-                    <h1 className='h1 mb-3'> 🌟Students Say</h1>
+                    <h1 className='h1'> 🌟Students Say</h1>
                 )}
 
-                <div className="container pb-8">
+                <div className="container pb-8 mt-4">
 
 
                     <div className="row">

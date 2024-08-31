@@ -9,17 +9,23 @@ const useAxios = () => {
 
   const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
-    headers: { Authorization: `Bearer ${accessToken}` },
   });
 
+  // Add Authorization header conditionally
   axiosInstance.interceptors.request.use(async (req) => {
-    if (!isAccessTokenExpired) {
-      return req;
+    // Check if the access token exists
+    if (accessToken) {
+      // Check if the access token is expired
+      if (isAccessTokenExpired()) {
+        // If expired, get a new token using the refresh token
+        const response = await getRefreshedToken(refreshToken);
+        setAuthUser(response.access, response.refresh);
+        req.headers.Authorization = `Bearer ${response.access}`;
+      } else {
+        // If not expired, use the current access token
+        req.headers.Authorization = `Bearer ${accessToken}`;
+      }
     }
-
-    const response = await getRefreshedToken(refreshToken);
-    setAuthUser(response.access, response.refresh);
-    req.headers.Authorization = `Bearer ${response.data?.access}`;
     return req;
   });
 

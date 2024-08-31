@@ -59,13 +59,13 @@ function CreateNewPassword() {
     <>
       <BaseHeader />
 
-      <section className="container d-flex flex-column vh-100" style={{ marginTop: "150px" }}>
+      <section className="lastSection container d-flex flex-column vh-60">
         <div className="row align-items-center justify-content-center g-0 h-lg-100 py-8">
           <div className="col-lg-5 col-md-8 py-8 py-xl-0">
             <div className="card shadow">
               <div className="card-body p-6">
                 <div className="mb-4">
-                  <h1 className="mb-1 fw-bold">Create New Password</h1>
+                  <h1 className="mb-1 fw-bold h1">Create New Password</h1>
                   <span>
                     Choose a new password for your account
                   </span>
@@ -113,7 +113,7 @@ function CreateNewPassword() {
 
                   <div>
                     <div className="d-grid">
-                      <button type="submit" className="btn btn-primary">
+                      <button type="submit" className="btn btn-success">
                         Save New Password <i className='fas fa-check-circle'></i>
                       </button>
                     </div>

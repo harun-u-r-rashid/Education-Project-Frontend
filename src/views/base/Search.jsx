@@ -112,7 +112,7 @@ function Search() {
     <>
       <BaseHeader />
 
-      <section className="mb-5" style={{ marginTop: "100px" }}>
+      <section className="mb-5">
         <div className="container mb-lg-8 ">
           <div className="searchBox row mb-5 mt-1 justify-content-center text-center">
             {/* col */}
@@ -249,15 +249,15 @@ function Search() {
         </div>
       </section>
 
-      <section className="my-8 py-lg-8">
-        {/* container */}
+      {/* <section className="my-8 py-lg-8">
+   
         <div className="container">
-          {/* row */}
+  
           <div className="row align-items-center bg-primary gx-0 rounded-3 mt-5">
-            {/* col */}
+       
             <div className="col-lg-6 col-12 d-none d-lg-block">
               <div className="d-flex justify-content-center pt-4">
-                {/* img */}
+         
                 <div className="position-relative">
                   <img
                     src="https://geeksui.codescandy.com/geeks/assets/images/png/cta-instructor-1.png"
@@ -270,7 +270,7 @@ function Search() {
                       alt="dollor"
                     />
                   </div>
-                  {/* img */}
+             
                   <div className="me-n4 position-absolute top-0 end-0">
                     <img
                       src="https://geeksui.codescandy.com/geeks/assets/images/svg/graph.svg"
@@ -282,7 +282,7 @@ function Search() {
             </div>
             <div className="col-lg-5 col-12">
               <div className="text-white p-5 p-lg-0">
-                {/* text */}
+      
                 <h2 className="h1 text-white">Become an instructor today</h2>
                 <p className="mb-0">
                   Instructors from around the world teach millions of students
@@ -296,7 +296,7 @@ function Search() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <BaseFooter />
     </>

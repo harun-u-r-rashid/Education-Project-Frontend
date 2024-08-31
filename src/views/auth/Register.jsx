@@ -46,13 +46,13 @@ function Register() {
     <>
       <BaseHeader />
 
-      <section className="container d-flex flex-column vh-100" style={{ marginTop: "150px" }}>
+      <section className="lastSection container d-flex flex-column vh-60">
         <div className="row align-items-center justify-content-center g-0 h-lg-100 py-8">
           <div className="col-lg-5 col-md-8 py-8 py-xl-0">
             <div className="card shadow">
               <div className="card-body p-6">
                 <div className="mb-4">
-                  <h1 className="mb-1 fw-bold">Sign up</h1>
+                  <h1 className="mb-1 fw-bold h1">Sign up</h1>
                   <span>
                     Already have an account?
                     <Link to="/login/" className="ms-1 text-dark">
@@ -71,7 +71,7 @@ function Register() {
                       className="form-control"
                       name="full_name"
                       placeholder="ex: Harunur Rashid"
-                      required=""
+                      required
                       onChange={(e) => setFullName(e.target.value)}
                     />
                   </div>
@@ -83,7 +83,7 @@ function Register() {
                       className="form-control"
                       name="email"
                       placeholder="ex: harun@gmail.com"
-                      required=""
+                      required
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
@@ -97,7 +97,7 @@ function Register() {
                       className="form-control"
                       name="password"
                       placeholder="**************"
-                      required=""
+                      required
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
@@ -110,12 +110,12 @@ function Register() {
                       className="form-control"
                       name="password"
                       placeholder="**************"
-                      required=""
+                      required
                       onChange={(e) => setPassword2(e.target.value)}
                     />
                   </div>
                   <div className="mb-3">
-                    <span className="h6">**Use alphabets, digits and symbol**.</span>
+                    <span className="span text-danger">Your password should be at least 8 characters long, combining letters, numbers, and special symbols</span>
                   </div>
                   <div>
                     <div className="d-grid">
@@ -123,14 +123,14 @@ function Register() {
                         <button
                           disabled
                           type="submit"
-                          className="btn btn-primary"
+                          className="btn btn-success"
                         >
                           Processing <i className="fas fa-spinner fa-spin"></i>
                         </button>
                       )}
 
                       {isLoading === false && (
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-success">
                           Sign Up <i className="fas fa-user-plus"></i>
                         </button>
                       )}

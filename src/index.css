@@ -1,85 +1,75 @@
-/* --primary-color: #4caf50;
-  --secondary-color: #ffc107;
-  --background-color: #f5f5f5;
-  --text-color: #333333;
-  --btn-color: #2196f3; */
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: auto;
+  height: 100vh;
+}
 
-  .authContainer {
-        display: flex;
-        flex-direction: column;
-        max-width: 500px;
-        margin: auto;
-        height: 100vh;
-      }
-      
-      .authTitle {
-        margin-top: 100px;
-        text-align: center;
-        margin-bottom: 1.5rem;
-      }
-      
-      .signIn a {
-        color: #007bff;
-        text-decoration: none;
-      }
-      
-      .signIn a:hover {
-        text-decoration: underline;
-      }
-      
-      .formContainer {
-        display: flex;
-        flex-direction: column;
-        padding: 25px;
-        box-shadow: 2px 2px 2px 2px #0000001d;
-        border-radius: 5px;
-      }
-      
-      .inputContainer {
-        margin-bottom: var(--medium-size);
-      }
-      
-      .form-label {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: #555555;
-        font-weight: bold;
-      }
-      
-      input[type="text"],
-      input[type="email"],
-      input[type="password"] {
-        width: 100%;
-        padding: var(--too-small-size);
-        border: 1px solid #cccccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        font-size: 1rem;
-      }
-      
-      input[type="text"]:focus,
-      input[type="email"]:focus,
-      input[type="password"]:focus {
-        border-color: var(--background-color);
-        outline: none;
-       
-      }
-      
-      
-      
-      
-      /* ======Login CSS======== */
-      
-      .forgetPassword{
-              text-align: center;
-      }
-      
-      
-      /* ======Logout====== */
-      
-      .btnLogoutArea{
-              display: flex;
-              justify-content: center;
-              gap: 20px;
-      }
-      
+.authTitle {
+  margin-top: 100px;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.signIn a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.signIn a:hover {
+  text-decoration: underline;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  box-shadow: 2px 2px 2px 2px #0000001d;
+  border-radius: 5px;
+}
+
+.inputContainer {
+  margin-bottom: var(--medium-size);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555555;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: var(--too-small-size);
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: var(--background-color);
+  outline: none;
+}
+
+/* ======Login CSS======== */
+
+.forgetPassword {
+  text-align: center;
+}
+
+
+
+/* ======Logout====== */
+
+.btnLogoutArea {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
